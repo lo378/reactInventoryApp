@@ -1,0 +1,154 @@
+var React = require('react');
+var ReactDom = require('react-dom');
+
+var ReactRouter = require('react-router');
+
+
+
+
+var Router = require('react-router-dom').BrowserRouter;
+var Route = require('react-router-dom').Route;
+var Link = require('react-router-dom').Link;
+var Redirect = require('react-router-dom').Redirect;
+
+var createHistory = require('history').createBrowserHistory;
+
+/*
+var History = require('react-router').hashHistory;
+var CreateBrowserHistory = require('history/lib/CreateBrowserHistory');
+*/
+
+
+
+
+/*
+var Router = require('react-router').Router
+var Route = require('react-router').Route
+var Switch = require('react-router').Switch
+*/
+
+var h = require('./helpers.js');
+
+
+
+
+// Not Found component
+var NoMatch = React.createClass({
+  render: function(){
+    return (
+      <h1>Not Found</h1>
+    );
+  }
+})
+
+
+
+
+//SETUP ROUTING
+var AppRoute = React.createClass({
+    render: function(){
+        return(      
+            <Router history={createHistory()}>
+                <div>
+                    <Route exact path="/" component={StorePicker} />
+                    <Route path="/store/:storeId" component={App} />
+                    <Route component={NoMatch}/>
+                </div>
+            </Router>
+        );
+    }
+});
+
+
+
+
+
+// App Component
+var App = React.createClass({
+  render: function(){
+    return(
+      <div className="catch-of-the-day">
+         <div className="menu">
+           <Header tagline="fresh SeaFood Market" />
+        </div>
+        <Order />
+        <Inventory />
+      </div>
+    );
+  }
+
+})
+
+// Header Component
+var Header = React.createClass({
+  render: function(){
+    return(
+      <header className="top">
+       <h1>Fresh
+        <span className="ofThe">
+          <span className="of"></span>
+          <span className="the"></span>
+        </span>
+        catch
+       </h1>
+       <h3>{this.props.tagline}</h3>
+      </header>
+    );
+  }
+
+})
+
+
+// Order Component
+var Order = React.createClass({
+  render: function(){
+    return(
+      <div className="">    
+      </div>
+    );
+  }
+
+})
+
+
+// Inventory Component
+var Inventory = React.createClass({
+  render: function(){
+    return(
+      <div className="">    
+      </div>
+    );
+  }
+
+})
+
+
+// Store Picker 
+var StorePicker = React.createClass({
+   history : createHistory(),
+  //custom functions
+   goToStore: function(e){
+    e.preventDefault();
+    //get data from value
+    var storeId = this.refs.storeId.value;
+    <Redirect to={{ pathname: this.history.push('/store/' + storeId) }} /> 
+
+  },
+
+  render: function(){
+    return(
+      <form action="" className="store-selector" onSubmit={this.goToStore}>
+      {/*store id*/}
+       <h2>Please Enter a Store ID</h2>
+       <input type="text" ref="storeId" defaultValue={h.getFunName()} required/>
+       <input type="submit"/> 
+      </form>
+    );
+  }
+
+})
+
+
+
+
+ReactDom.render(<AppRoute />, document.getElementById('main'));
